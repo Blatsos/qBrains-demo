@@ -7,10 +7,9 @@
           <v-card-title primary-title>
             <h4>Login</h4>
           </v-card-title>
-          <!-- eslint-disable-next-line vue/no-unused-vars -->
           <v-card-text>
             <ValidationObserver v-slot="{ handleSubmit }">
-              <v-form @submit.prevent="handleSubmit(login)">
+              <v-form @submit.prevent="handleSubmit(loginHandler())">
                 <ValidationProvider
                   v-slot="{ errors }"
                   name="StoreName"
@@ -71,7 +70,6 @@
                   :rules="{
                     regex: /^[A-Za-z0-9!@#$%]*$/,
                     required: true,
-                    max: 15,
                   }"
                 >
                   <v-text-field
@@ -112,7 +110,6 @@ import {
   setInteractionMode,
 } from "vee-validate";
 import { mapActions } from "vuex";
-import api from "../plugins/woocommerceRestAPI";
 
 setInteractionMode("eager");
 
@@ -147,52 +144,20 @@ export default {
     apiKey: null,
   }),
   methods: {
-    ...mapActions("user", ["createUser"]),
-    async register() {
-      this.loadingRegister = !this.loadingRegister;
-      try {
-        this.loadingRegister = !this.loadingRegister;
-        await this.createUser({
-          userName: this.username,
-          password: this.password,
-          userRoles: this.userRole,
-        });
-        this.$router.push("/");
-      } catch (error) {
-        this.loadingRegister = !this.loadingRegister;
-      }
-    },
-
-    login() {
-      console.log("Pressed");
-      api
-        .get("products", {
-          per_page: 20, // 20 products per page
-        })
-        .then((response) => {
-          // Successful request
-          console.log("Response Status:", response.status);
-          console.log("Response Headers:", response.headers);
-          console.log("Response Data:", response.data);
-          console.log("Total of pages:", response.headers["x-wp-totalpages"]);
-          console.log("Total of items:", response.headers["x-wp-total"]);
-        })
-        .catch((error) => {
-          // Invalid request, for 4xx and 5xx statuses
-          console.log("Response Status:", error.response.status);
-          console.log("Response Headers:", error.response.headers);
-          console.log("Response Data:", error.response.data);
-        })
-        .finally(() => {
-          // Always executed.
-        });
+    ...mapActions("user", ["loginUser"]),
+    loginHandler() {
+      this.loadingLogin = !this.loadingLogin;
+      this.loginUser({
+        storeName: this.storeName,
+        userName: this.username,
+        password: this.password,
+        apiKey: this.apiKey,
+      });
+      this.$router.push("/dashboard");
     },
   },
 };
 </script>
 
 <style scoped>
-/* .cover {
-  height: 300px;
-} */
 </style>
