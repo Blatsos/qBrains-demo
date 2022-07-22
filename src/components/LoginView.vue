@@ -22,7 +22,7 @@
                   <v-text-field
                     v-model="storeName"
                     :error-messages="errors"
-                    prepend-icon="mdi-account"
+                    prepend-icon="mdi-store"
                     name="StoreName"
                     label="Store Name"
                   ></v-text-field>
@@ -66,7 +66,23 @@
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
-                  name="APIKey"
+                  name="ConsumerKey"
+                  :rules="{
+                    regex: /^[A-Za-z0-9!@#$%]*$/,
+                    required: true,
+                  }"
+                >
+                  <v-text-field
+                    v-model="consumerKey"
+                    :error-messages="errors"
+                    prepend-icon="mdi-key"
+                    name="ConsumerKey"
+                    label="Consumer Key"
+                  ></v-text-field>
+                </ValidationProvider>
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  name="ConsumerSecret"
                   :rules="{
                     regex: /^[A-Za-z0-9!@#$%]*$/,
                     required: true,
@@ -75,15 +91,15 @@
                   <v-text-field
                     v-model="apiKey"
                     :error-messages="errors"
-                    prepend-icon="mdi-account"
-                    name="APIKey"
-                    label="API Key"
+                    prepend-icon="mdi-account-key"
+                    name="ConsumerSecret"
+                    label="Consumer Secret"
                   ></v-text-field>
                 </ValidationProvider>
                 <v-card-actions>
                   <v-btn
                     :loading="loadingLogin"
-                    color="rgb(102, 102, 51, 0.5)"
+                    :color="primaryColor"
                     type="submit"
                     primary
                     large
@@ -110,6 +126,7 @@ import {
   setInteractionMode,
 } from "vee-validate";
 import { mapActions } from "vuex";
+import Colors from "../Constants/Colors";
 
 setInteractionMode("eager");
 
@@ -137,11 +154,13 @@ export default {
     ValidationObserver,
   },
   data: () => ({
+    primaryColor: Colors.primaryColor,
     loadingLogin: false,
     storeName: null,
     username: null,
     password: null,
-    apiKey: null,
+    consumerKey: null,
+    consumerSecret: null,
   }),
   methods: {
     ...mapActions("user", ["loginUser"]),
@@ -151,7 +170,8 @@ export default {
         storeName: this.storeName,
         userName: this.username,
         password: this.password,
-        apiKey: this.apiKey,
+        consumerKey: this.consumerKey,
+        consumerSecret: this.consumerSecret,
       });
       this.$router.push("/dashboard");
     },
