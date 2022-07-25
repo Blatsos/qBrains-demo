@@ -1,18 +1,13 @@
 <template>
-  <div class="container">
-    <h1 class="title">User Profile Details</h1>
-    <div class="sideToSide">
-      <h2>Username:</h2>
-      <h2>{{ user.userName }}</h2>
-    </div>
-    <div class="sideToSide">
-      <h2>Store Name:</h2>
-      <h2>{{ user.storeName }}</h2>
-    </div>
-    <div class="sideToSide">
-      <h2>Password:</h2>
-      <h2>{{ user.password }}</h2>
-    </div>
+  <div>
+    <h2>User Profile Details</h2>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      item-key="name"
+      hide-default-footer
+      class="elevation-1"
+    ></v-data-table>
   </div>
 </template>
 
@@ -22,6 +17,15 @@ export default {
   data() {
     return {
       user: {},
+      headers: [
+        {
+          text: "Property",
+          align: "start",
+          value: "name",
+        },
+        { text: "Value", value: "category" },
+      ],
+      items: [],
     };
   },
   computed: {
@@ -29,25 +33,32 @@ export default {
   },
   beforeMount() {
     this.user = this.getUser;
+    this.items = [
+      {
+        name: "Store Name",
+        category: this.user.storeName,
+      },
+      {
+        name: "User Name",
+        category: this.user.userName,
+      },
+      {
+        name: "Password",
+        category: this.user.password,
+      },
+      {
+        name: "Consumer Key",
+        category: this.user.consumerKey,
+      },
+      {
+        name: "Consumer Secret",
+        category: this.user.consumerSecret,
+      },
+    ];
   },
 };
 </script>
 
 <style scoped>
-.container {
-  padding: 1rem;
-  background-color: #f4f1bb;
-  border-radius: 2rem;
-}
-.title {
-  text-align: center;
-}
-.sideToSide {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  padding: 2rem;
-}
 </style>
 

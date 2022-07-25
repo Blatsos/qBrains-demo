@@ -68,7 +68,6 @@
                   v-slot="{ errors }"
                   name="ConsumerKey"
                   :rules="{
-                    regex: /^[A-Za-z0-9!@#$%]*$/,
                     required: true,
                   }"
                 >
@@ -77,6 +76,7 @@
                     :error-messages="errors"
                     prepend-icon="mdi-key"
                     name="ConsumerKey"
+                    type="password"
                     label="Consumer Key"
                   ></v-text-field>
                 </ValidationProvider>
@@ -84,15 +84,15 @@
                   v-slot="{ errors }"
                   name="ConsumerSecret"
                   :rules="{
-                    regex: /^[A-Za-z0-9!@#$%]*$/,
                     required: true,
                   }"
                 >
                   <v-text-field
-                    v-model="apiKey"
+                    v-model="consumerSecret"
                     :error-messages="errors"
                     prepend-icon="mdi-account-key"
                     name="ConsumerSecret"
+                    type="password"
                     label="Consumer Secret"
                   ></v-text-field>
                 </ValidationProvider>

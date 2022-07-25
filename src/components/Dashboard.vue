@@ -112,7 +112,6 @@ export default {
           break;
         default:
       }
-      console.log(title);
     },
   },
   computed: {
